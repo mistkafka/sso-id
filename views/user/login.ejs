@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+    <title><%= title %></title>
+    <meta charset="utf-8"/>
+    <link rel="stylesheet" href="/stylesheets/style.css"/>
+</head>
+
+<body>
+<header>
+    <h1><%= title %></h1>
+</header>
+
+<main>
+    <section id="loginSection">
+        <form action="/users/login" method="POST">
+            <input type="hidden" value="<%= callback %>" /><br>
+            <input type="text" name="username" placeholder="User Name"/><br>
+            <input type="password" name="password" placeholder="Password"/><br>
+            <input type="submit" value="Login"><br>
+        </form>
+    </section>
+</main>
+
+<footer>&copy; 2016 by Mistkafka</footer>
+<script src="/javascripts/login_client.js"></script>
+</body>
+</html>

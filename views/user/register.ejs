@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+<head>
+    <title><%= title %></title>
+    <meta charset="urt-8"/>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+</head>
+
+<body>
+<header>
+    <h1><%= title %></h1>
+</header>
+
+<main>
+    <section id="registerSection">
+        <form action="/users/register" method="POST">
+            <input type="hidden" value="<%= callback %>"/>
+            <input type="text" name="username" placeholder="User Name"/><br/>
+            <input type="password" name="password1" placeholder="Password"/><br/>
+            <input type="password" name="password2" placeholder="Re-Password"/><br/>
+            <input type="submit" value="Register"/><br/>
+        </form>
+    </section>
+</main>
+
+<footer><p>&copy; 2016 by Mistkafka</p></footer>
+</body>
+
+<script src="/javascripts/register_client.js"></script>
+</html>
