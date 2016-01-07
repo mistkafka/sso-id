@@ -4,14 +4,41 @@ var User = require('../models/User');
 var hash = require('password-hash');
 
 
-router.get('/login', function (req, res, next) {
+
+// visit "Login" page
+router.get('/login', function (req, res) {
   res.render('user/login', {
     title: 'Login',
     callback: req.query.callback
   });
 });
 
-router.get('/register', function (req, res, next) {
+// check user exist
+router.post('/login', function (req, res, next) {
+  User.find({username: req.body.username}, function (err, users) {
+    if (!users[0]) {
+      return res.redirect('/');
+    }
+    next();
+  });
+});
+// deal with "Login" action
+router.post('/login', function (req, res) {
+  User.find({username: req.body.username}, function(err, users) {
+    if (err) {throw err;}
+
+    if (hash.verify(req.body.password, users[0].password_hs)) {
+      if (req.body.callback) {
+        return res.redirect(req.body.callback);
+      }
+
+      return res.redirect('/');
+    }
+    return res.redirect('/login?callback=' + req.body.callback);
+  });
+});
+
+router.get('/register', function (req, res) {
   res.render('user/register', {
     title: 'Register',
     callback: req.query.callback

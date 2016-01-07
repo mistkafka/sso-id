@@ -14,7 +14,7 @@
 <main>
     <section id="loginSection">
         <form action="/users/login" method="POST">
-            <input type="hidden" value="<%= callback %>" /><br>
+            <input type="hidden" name="callback" value="<%= callback %>" /><br>
             <input type="text" name="username" placeholder="User Name"/><br>
             <input type="password" name="password" placeholder="Password"/><br>
             <input type="submit" value="Login"><br>
