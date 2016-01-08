@@ -3,17 +3,17 @@ var register = document.getElementById('register');
 var logout = document.getElementById('logout');
 
 login.onclick = function () {
-  var url = 'http://id.vhost.com/users/login?callback=' + location.href;
+  var url = 'http://id.vhost.com/users/login?callback=http://' + location.host + location.pathname;
   location.replace(url);
 };
 
 register.onclick = function () {
-  var url = 'http://id.vhost.com/users/register?callback=' + location.href;
+  var url = 'http://id.vhost.com/users/register?callback=http://' + location.host + location.pathname;
   location.replace(url);
 };
 
 logout.onclick = function () {
-  var url = 'http://id.vhost.com/users/logout?callback=' + location.href;
+  var url = 'http://id.vhost.com/users/logout?callback=http://' + location.host + location.pathname;
   location.replace(url);
 };
 
