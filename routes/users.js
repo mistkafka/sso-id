@@ -2,6 +2,10 @@ var express = require('express');
 var router = express.Router();
 var User = require('../models/User');
 var hash = require('password-hash');
+var rsaKeys = require('../config/rsaKeys');
+var NodeRSA = require('node-rsa');
+var Token = require('../models/Token');
+var tinyCookie = require('tiny-cookie');
 
 
 
@@ -22,19 +26,45 @@ router.post('/login', function (req, res, next) {
     next();
   });
 });
-// deal with "Login" action
-router.post('/login', function (req, res) {
+// verify password
+router.post('/login', function (req, res, next) {
   User.find({username: req.body.username}, function(err, users) {
     if (err) {throw err;}
 
     if (hash.verify(req.body.password, users[0].password_hs)) {
-      if (req.body.callback) {
-        return res.redirect(req.body.callback);
-      }
-
-      return res.redirect('/');
+      return next();
     }
     return res.redirect('/login?callback=' + req.body.callback);
+  });
+});
+// deal with login
+router.post('/login', function (req, res) {
+
+  // generate unique token
+  var info = {
+    username: req.body.username,
+    timestamp: Date.now()
+  };
+  var signRSA = new NodeRSA(rsaKeys.signPrivateKey);
+  var encryptRSA = new NodeRSA(rsaKeys.encryptPublicKey);
+  var data = JSON.stringify(info);
+  var signature = signRSA.sign(data, 'base64');
+  var token = Date.now() + encryptRSA.encrypt(signature + '|' + data, 'base64');
+
+  // store token
+  // set up session
+  // set up token on cookie
+  // redirect to callback
+  var newToken = new Token({
+    token: token,
+    username: req.body.username,
+    createTime: Date.now()
+  });
+  newToken.save(function (err) {
+    if (err) {throw err;}
+
+    req.session.user = req.body.username;
+    res.redirect((req.body.callback || '/') + '?token=' + token);
   });
 });
 
