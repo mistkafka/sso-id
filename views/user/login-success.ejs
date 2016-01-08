@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= title %></title>
+</head>
+<body>
+<input type="hidden" value="<%= callback %>" id="callback"/>
+</body>
+<script>
+    var callback = document.getElementById('callback').value;
+    location.replace(callback);
+</script>
+</html>

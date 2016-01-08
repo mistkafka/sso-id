@@ -5,6 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var expressSession = require('express-session');
+var IDFilter = require('./utils/IDFilter');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -25,6 +26,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(expressSession({
   secret: 'kangkang\'sfatheriskangkang'
 }));
+app.use(IDFilter);
 
 app.use('/', routes);
 app.use('/users', users);

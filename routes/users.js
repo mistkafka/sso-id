@@ -51,7 +51,11 @@ router.post('/login', function (req, res) {
 
     req.session.user = req.body.username;
     req.session.token = token;
-    res.redirect((req.body.callback || '/') + '?token=' + token);
+
+    var callback = req.body.callback || '/';
+    var url = 'http://id.vhost.com/users/plant?callback=' + callback;
+    url += '&token=' + token;
+    res.redirect(url);
   });
 });
 
@@ -107,41 +111,31 @@ router.post('/verify-token', function (req, res) {
 });
 
 router.get('/logout', function (req, res) {
-  if (!req.session.user) {
-    return res.redirect(req.query.callback || '/');
+  var token = req.cookies.SSOID;
+  if ((!token) || token=='') {
+    res.redirect(req.query.callback || '/');
   }
-  var token = req.session.token;
-  req.session.user = null;
-  req.session.token = null;
   Token.remove({token:token}, function (err) {
     if (err) {throw err;}
     console.log('token:' + token + '   removed');
     res.redirect(req.query.callback || '/');
   });
 
-  // remove session from all client-app
-  //fetch.get('http://music.vhost.com/logout?outToken=' + token);
-  //fetch.get('http://news.vhost.com/logout?outToken=' + token);
-
 });
 
 
-
-// TODO: 后面再来完善检验机制
-//router.route('/isexist')
-//  .post(function (req, res) {
-//    User.find({username:req.body.username}, function (err, user) {
-//      if (err) throw err;
-//
-//      var rslt = {
-//        success: 'success',
-//        errMsg: ''
-//      };
-//      if (user) {
-//        rslt.success = 'failed';
-//      }
-//      res.end(JSON.stringify(rslt));
-//    })
-//  });
+/**
+ * 用来种植Token
+ * Note: 不对token进行验证，后期加入签名信息代替验证
+ */
+router.get('/plant', function (req, res) {
+  var token = req.query.token;
+  var callback = req.query.callback;
+  res.setHeader('Set-Cookie', 'SSOID=' + token + ';domain=vhost.com;path=/');
+  res.render('user/login-success', {
+    title: 'login success',
+    callback: callback
+  });
+});
 
 module.exports = router;
