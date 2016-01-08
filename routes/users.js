@@ -5,7 +5,8 @@ var hash = require('password-hash');
 var rsaKeys = require('../config/rsaKeys');
 var NodeRSA = require('node-rsa');
 var Token = require('../models/Token');
-var tinyCookie = require('tiny-cookie');
+var tokenGenerator = require('random-token')
+  .create('abcdefghijklmnopqrstuvwxzyABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789');
 
 
 
@@ -39,22 +40,7 @@ router.post('/login', function (req, res, next) {
 });
 // deal with login
 router.post('/login', function (req, res) {
-
-  // generate unique token
-  var info = {
-    username: req.body.username,
-    timestamp: Date.now()
-  };
-  var signRSA = new NodeRSA(rsaKeys.signPrivateKey);
-  var encryptRSA = new NodeRSA(rsaKeys.encryptPublicKey);
-  var data = JSON.stringify(info);
-  var signature = signRSA.sign(data, 'base64');
-  var token = Date.now() + encryptRSA.encrypt(signature + '|' + data, 'base64');
-
-  // store token
-  // set up session
-  // set up token on cookie
-  // redirect to callback
+  var token = Date.now() + tokenGenerator(17);
   var newToken = new Token({
     token: token,
     username: req.body.username,
@@ -102,6 +88,23 @@ router.post('/register', function (req, res) {
     res.redirect('/users/login');
   })
 });
+
+// server2server API: verify token
+router.post('/verify-token', function (req, res) {
+  var token = req.body.token;
+  console.log(token);
+  Token.find({token:token}, function (err, tokens) {
+    if (err) {throw err;}
+
+    var rslt = {success: 'failed', message: 'Invalid Token'};
+    if (tokens[0]) {
+      rslt.success = 'success';
+      rslt.message = tokens[0].username;
+    }
+    res.end(JSON.stringify(rslt));
+  })
+});
+
 
 
 // TODO: 后面再来完善检验机制

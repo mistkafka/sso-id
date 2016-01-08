@@ -17,6 +17,7 @@
     "express-session": "~1.12.1",
     "mongoose": "~4.3.4",
     "password-hash": "~1.2.2",
-    "node-rsa": "0.2.26"
+    "node-rsa": "0.2.26",
+    "random-token": "0.0.8"
   }
 }
