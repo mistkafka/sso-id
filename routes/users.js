@@ -7,7 +7,7 @@ var NodeRSA = require('node-rsa');
 var Token = require('../models/Token');
 var tokenGenerator = require('random-token')
   .create('abcdefghijklmnopqrstuvwxzyABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789');
-
+var fetch = require('superfetch');
 
 
 // visit "Login" page
@@ -50,6 +50,7 @@ router.post('/login', function (req, res) {
     if (err) {throw err;}
 
     req.session.user = req.body.username;
+    req.session.token = token;
     res.redirect((req.body.callback || '/') + '?token=' + token);
   });
 });
@@ -103,6 +104,25 @@ router.post('/verify-token', function (req, res) {
     }
     res.end(JSON.stringify(rslt));
   })
+});
+
+router.get('/logout', function (req, res) {
+  if (!req.session.user) {
+    return res.redirect(req.query.callback || '/');
+  }
+  var token = req.session.token;
+  req.session.user = null;
+  req.session.token = null;
+  Token.remove({token:token}, function (err) {
+    if (err) {throw err;}
+    console.log('token:' + token + '   removed');
+    res.redirect(req.query.callback || '/');
+  });
+
+  // remove session from all client-app
+  //fetch.get('http://music.vhost.com/logout?outToken=' + token);
+  //fetch.get('http://news.vhost.com/logout?outToken=' + token);
+
 });
 
 

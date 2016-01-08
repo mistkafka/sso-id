@@ -1,11 +1,37 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-  </body>
+<html lang="zh_CN">
+<head>
+  <title><%= title %></title>
+  <meta charset="utf-8">
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+<body>
+
+<header>
+  <h1><%= title %></h1>
+  <p>Welcome to <%= title %></p>
+</header>
+
+<nav>
+  <ul>
+    <li><button class="linkButton" id="login">Login</button></li>
+    <li><button class="linkButton" id="register">Register</button></li>
+    <li><button class="linkbutton" id="logout">Logout</button></li>
+  </ul>
+</nav>
+
+<main>
+  <section>
+    <p>user: <%= username %></p>
+    <p>visit count: <%= count %></p>
+  </section>
+</main>
+
+<footer>
+  <p>&copy; 2015</p>
+</footer>
+
+<script src="/javascripts/sso.js"></script>
+</body>
 </html>
+
