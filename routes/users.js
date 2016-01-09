@@ -41,20 +41,25 @@ router.post('/login', function (req, res, next) {
 // deal with login
 router.post('/login', function (req, res) {
   var token = Date.now() + tokenGenerator(17);
-  var newToken = new Token({
+  token = {
     token: token,
     username: req.body.username,
     createTime: Date.now()
-  });
+  };
+  var newToken = new Token(token);
   newToken.save(function (err) {
     if (err) {throw err;}
 
     req.session.user = req.body.username;
-    req.session.token = token;
+    req.session.token = token.token; // TODO: maybe can remove
+
+    // add token to client-server
+    fetch.post('http://music.vhost.com/add-token', {token: token});
+    fetch.post('http://news.vhost.com/add-token', {token: token});
 
     var callback = req.body.callback || '/';
     var url = 'http://id.vhost.com/users/plant?callback=' + callback;
-    url += '&token=' + token;
+    url += '&token=' + token.token;
     res.redirect(url);
   });
 });
@@ -94,30 +99,15 @@ router.post('/register', function (req, res) {
   })
 });
 
-// server2server API: verify token
-router.post('/verify-token', function (req, res) {
-  var token = req.body.token;
-  console.log(token);
-  Token.find({token:token}, function (err, tokens) {
-    if (err) {throw err;}
-
-    var rslt = {success: 'failed', message: 'Invalid Token'};
-    if (tokens[0]) {
-      rslt.success = 'success';
-      rslt.message = tokens[0].username;
-    }
-    res.end(JSON.stringify(rslt));
-  })
-});
-
 router.get('/logout', function (req, res) {
   var token = req.cookies.SSOID;
   if ((!token) || token=='') {
     res.redirect(req.query.callback || '/');
   }
+  fetch.post('http://music.vhost.com/delete-token', {token: token});
+  fetch.post('http://news.vhost.com/delete-token', {token: token});
   Token.remove({token:token}, function (err) {
     if (err) {throw err;}
-    console.log('token:' + token + '   removed');
     res.redirect(req.query.callback || '/');
   });
 
@@ -131,7 +121,7 @@ router.get('/logout', function (req, res) {
 router.get('/plant', function (req, res) {
   var token = req.query.token;
   var callback = req.query.callback;
-  res.setHeader('Set-Cookie', 'SSOID=' + token + ';domain=vhost.com;path=/');
+  res.setHeader('Set-Cookie', 'SSOID=' + token + ';domain=vhost.com;path=/;HttpOnly');
   res.render('user/login-success', {
     title: 'login success',
     callback: callback
