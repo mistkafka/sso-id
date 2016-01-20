@@ -50,9 +50,6 @@ router.post('/login', function (req, res) {
   newToken.save(function (err) {
     if (err) {throw err;}
 
-    req.session.user = req.body.username;
-    req.session.token = token.token; // TODO: maybe can remove
-
     // add token to client-server
     fetch.post('http://music.vhost.com/add-token', {token: token});
     fetch.post('http://news.vhost.com/add-token', {token: token});
@@ -106,6 +103,9 @@ router.get('/logout', function (req, res) {
   }
   fetch.post('http://music.vhost.com/delete-token', {token: token});
   fetch.post('http://news.vhost.com/delete-token', {token: token});
+  req.session.user = null;
+  req.session.token = null;
+  req.session.loginTime = null;
   Token.remove({token:token}, function (err) {
     if (err) {throw err;}
     res.redirect(req.query.callback || '/');

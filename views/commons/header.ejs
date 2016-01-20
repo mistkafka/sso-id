@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh_CN">
+
+<head>
+    <meta charset="UTF-8">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/stylesheets/style.css"/>
+</head>
+
+<body>
+<header>
+    <div class="header-center">
+        <div id="sso-flag">
+            <h2>Single Sign-On</h2>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="http://id.vhost.com">ID</a></li>
+                <li><a href="http://music.vhost.com">Music</a></li>
+                <li><a href="http://news.vhost.com">News</a></li>
+                <% if (user) { %>
+                <li><%= user%></li>
+                <li><button id="logout">Logout</button></li>
+                <%} else {%>
+                <li><button id="login">Login</button></li>
+                <li><button id="register">Register</button></li>
+                <%}%>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<section id="token-bar">
+    <p>Login In Token: <%= token %></p>
+    <p>Login In Time: <%= loginTime %></p>
+    <p>Current Domain: <%= domain %></p>
+    <p>Current Visit Path: <%= path %></p>
+</section>
+
+<main>

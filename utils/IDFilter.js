@@ -9,6 +9,8 @@ var tokenFilter = function (req, res, next) {
   var token = req.cookies.SSOID;
   if (!token) {
     req.session.user = null;
+    req.session.token = null;
+    req.session.loginTime = null;
     return next();
   }
 
@@ -20,6 +22,8 @@ var tokenFilter = function (req, res, next) {
       return next();
     }
     req.session.user = tokens[0].username;
+    req.session.token = tokens[0].token;
+    req.session.loginTime = tokens[0].createTime;
     return next();
   });
 };
