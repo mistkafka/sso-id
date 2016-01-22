@@ -1,19 +1,17 @@
 var express = require('express');
 var router = express.Router();
 
-/* GET home page. */
 router.get('/', function(req, res, next) {
-  if (!req.session.count) {
-    req.session.count = 1;
-  } else {
-    req.session.count++;
-  }
+  var url = 'http://' + req.hostname + req.originalUrl;
   res.render('index', {
     title: 'ID',
-    username: req.session.user,
-    count: req.session.count
+    user: req.session.user,
+    token: req.session.token,
+    loginTime: req.session.loginTime,
+    path: req.path,
+    domain: req.hostname,
+    url: url
   });
 });
-
 
 module.exports = router;
