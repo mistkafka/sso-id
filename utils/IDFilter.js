@@ -5,6 +5,7 @@
 var Token = require('../models/Token');
 
 var tokenFilter = function (req, res, next) {
+  console.log('ID Filter');
   // there is no id, skip it.
   var token = req.cookies.SSOID;
   if (!token) {
