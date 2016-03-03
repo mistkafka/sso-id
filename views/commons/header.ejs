@@ -30,6 +30,17 @@
     </div>
 </header>
 
+<section id="message-panple">
+    <% if (error) { %>
+        <div><p><%= error %></p></div>
+    <% } %>
+
+    <% if (success) { %>
+        <div><p><%= success %></p></div>
+    <% } %>
+</section>
+
+
 <section id="token-bar">
     <p>Login In Token: <%= ssoInfo.token %></p>
     <p>Login In Time: <%= ssoInfo.loginTime %></p>
