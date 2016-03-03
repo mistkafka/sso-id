@@ -55,6 +55,7 @@ router.post('/login', function (req, res) {
       if (err) throw err;
       clients.forEach(function (client) {
         var url = 'http://' + client.domain + '/add-token';
+        console.log('sync token to:' + url);
         fetch.post(url, {token: token});
       });
       var callback = req.body.callback || '/';
@@ -131,10 +132,15 @@ router.get('/logout', function (req, res) {
 router.get('/plant', function (req, res) {
   var token = req.query.token;
   var callback = req.query.callback;
-  res.setHeader('Set-Cookie', 'SSOID=' + token + ';domain=vhost.com;path=/;HttpOnly');
-  res.render('user/login-success', {
-    title: 'login success',
-    callback: callback
+
+  Client.find({isCrossDomain: true}, function (err, clients) {
+    res.setHeader('Set-Cookie', 'SSOID=' + token + ';domain=vhost.com;path=/;HttpOnly');
+    res.render('user/login-success', {
+      title: 'login success',
+      callback: callback,
+      token: token,
+      crossDomainClients: clients
+    });
   });
 });
 
