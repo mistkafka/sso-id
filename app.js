@@ -5,10 +5,13 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var expressSession = require('express-session');
+var flash = require('connect-flash');
 var IDFilter = require('./utils/IDFilter');
+var ssoInfoFilter = require('./utils/SSOInfoFilter');
 
 var routes = require('./routes/index');
-var users = require('./routes/users');
+var usersRoutes = require('./routes/users');
+var clientsRouts = require('./routes/clients');
 
 var app = express();
 
@@ -26,10 +29,15 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(expressSession({
   secret: 'kangkang\'sfatheriskangkang'
 }));
+app.use(flash());
+
+// custom filter
 app.use(IDFilter);
+app.use(ssoInfoFilter);
 
 app.use('/', routes);
-app.use('/users', users);
+app.use('/users', usersRoutes);
+app.use('/clients', clientsRouts);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

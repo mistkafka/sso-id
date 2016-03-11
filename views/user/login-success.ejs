@@ -5,9 +5,16 @@
 </head>
 <body>
 <input type="hidden" value="<%= callback %>" id="callback"/>
+<% crossDomainClients.forEach(function (client) { %>
+    <%var url = 'http://' + client.domain + '/plantcookie?token=' + token%>
+    <iframe width="0" height="0" src="<%= url %>"></iframe>
+<% }) %>
 </body>
 <script>
-    var callback = document.getElementById('callback').value;
-    location.replace(callback);
+    window.setTimeout(function () {
+                var callback = document.getElementById('callback').value;
+                location.replace(callback);
+            },
+            1000);
 </script>
 </html>

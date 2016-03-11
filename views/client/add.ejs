@@ -1,0 +1,13 @@
+<% include ../commons/header %>
+
+<form method="post" action="/clients" id="clientForm">
+    <h3>Create Client</h3>
+    <input type="text" name="clientName" placeholder="Client Name"><br>
+    <input type="url" name="clientDomain" placeholder="Client Domain"><br>
+    <label>Is Cross domain?</label>Yes:<input type="radio" name="isCrossDomain" value="true" >No:<input type="radio" name="isCrossDomain" value="false" checked="checked"><br/>
+    <input type="text" name="clientDescription" placeholder="Client Description"><br>
+    <input type="text" name="accessToken" placeholder="Access Token"><br>
+    <input type="submit" value="Create Client">
+</form>
+
+<% include ../commons/footer %>

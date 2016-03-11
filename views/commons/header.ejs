@@ -18,8 +18,8 @@
                 <li><a href="http://id.vhost.com">ID</a></li>
                 <li><a href="http://music.vhost.com">Music</a></li>
                 <li><a href="http://news.vhost.com">News</a></li>
-                <% if (user) { %>
-                <li><%= user%></li>
+                <% if (ssoInfo.user) { %>
+                <li><%= ssoInfo.user%></li>
                 <li><button id="logout">Logout</button></li>
                 <%} else {%>
                 <li><button id="login">Login</button></li>
@@ -30,11 +30,22 @@
     </div>
 </header>
 
+<section id="message-panple">
+    <% if (error) { %>
+        <div><p><%= error %></p></div>
+    <% } %>
+
+    <% if (success) { %>
+        <div><p><%= success %></p></div>
+    <% } %>
+</section>
+
+
 <section id="token-bar">
-    <p>Login In Token: <%= token %></p>
-    <p>Login In Time: <%= loginTime %></p>
-    <p>Current Domain: <%= domain %></p>
-    <p>Current Visit Path: <%= path %></p>
+    <p>Login In Token: <%= ssoInfo.token %></p>
+    <p>Login In Time: <%= ssoInfo.loginTime %></p>
+    <p>Current Domain: <%= ssoInfo.domain %></p>
+    <p>Current Visit Path: <%= ssoInfo.path %></p>
 </section>
 
 <main>

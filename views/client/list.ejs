@@ -1,0 +1,19 @@
+<% include ../commons/header %>
+
+<nav>
+    <ul>
+        <li><a href="/clients/add">添加客户端</a></li>
+    </ul>
+</nav>
+
+<ul>
+    <% clients.forEach(function (client) { %>
+    <li>
+        <%= client.name %>
+        <a href="/clients/view/<%= client.name %>">edit</a>
+        <a href="/clients/delete/<%= client.name %>">del</a>
+    </li>
+    <% }); %>
+</ul>
+
+<% include ../commons/footer %>

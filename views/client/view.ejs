@@ -1,0 +1,17 @@
+<% include ../commons/header %>
+
+<form id="clientForm" action="/clients/update/<%= client.name%>" method="POST">
+    <input type="hidden" name="_id" value="<%= client._id %>">
+    <input type="text" name="clientName" placeholder="Client Name" value="<%= client.name %>"><br>
+    <input type="url" name="clientDomain" placeholder="Client Domain" value="<%= client.domain %>"><br>
+    <% if(client.isCrossDomain) { %>
+    <label>Is Cross domain?</label>Yes:<input type="radio" name="isCrossDomain" value="true" checked="checked">No:<input type="radio" name="isCrossDomain" value="false" ><br/>
+    <% } else {%>
+    <label>Is Cross domain?</label>Yes:<input type="radio" name="isCrossDomain" value="true">No:<input type="radio" name="isCrossDomain" value="false" checked="checked"><br/>
+    <% } %>
+    <input type="text" name="clientDescription" placeholder="Client Description" value="<%= client.description %>"><br>
+    <input type="text" name="accessToken" placeholder="Access Token" value="<%= client.accessToken %>"><br>
+    <input type="submit" value="Update">
+</form>
+
+<% include ../commons/footer %>
