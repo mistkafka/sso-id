@@ -4,11 +4,12 @@ var User = require('../models/User');
 var hash = require('password-hash');
 var rsaKeys = require('../config/rsaKeys');
 var NodeRSA = require('node-rsa');
-var Token = require('../models/Token');
 var tokenGenerator = require('random-token')
   .create('abcdefghijklmnopqrstuvwxzyABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789');
 var fetch = require('superfetch');
 var Client = require('../models/Client');
+var redis = require('redis');
+var redisCli = redis.createClient('redis://redis:linzg123@master-id.redis.db:7000');
 
 
 // visit "Login" page
@@ -42,27 +43,18 @@ router.post('/login', function (req, res, next) {
 // deal with login
 router.post('/login', function (req, res) {
   var token = Date.now() + tokenGenerator(17);
-  token = {
-    token: token,
-    username: req.body.username,
-    createTime: Date.now()
-  };
-  var newToken = new Token(token);
-  newToken.save(function (err) {
-    if (err) {throw err;}
-
-    Client.find({}, function (err, clients) {
-      if (err) throw err;
-      clients.forEach(function (client) {
-        var url = 'http://' + client.domain + '/add-token';
-        console.log('sync token to:' + url);
-        fetch.post(url, {token: token});
-      });
-      var callback = req.body.callback || '/';
-      var url = 'http://id.vhost.com/users/plant?callback=' + callback;
-      url += '&token=' + token.token;
-      res.redirect(url);
-    })
+  // todo: 采集更多token信息,包括:
+  // 浏览器版本
+  // ip
+  // 地理位置
+  // 操作系统型号
+  // todo: 加密要跨域种植的token
+  redisCli.hmset(token, ['account', req.body.username, 'loginTime', Date.now()], function (err, rslt) {
+    if (err) throw err;
+    var callback = req.body.callback || '/';
+    var url = 'http://id.vhost.com/users/plant?callback=' + callback;
+    url += '$token=' + token;
+    res.redirect(url);
   });
 });
 

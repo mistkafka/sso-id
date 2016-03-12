@@ -6,8 +6,6 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var expressSession = require('express-session');
 var flash = require('connect-flash');
-var IDFilter = require('./utils/IDFilter');
-var ssoInfoFilter = require('./utils/SSOInfoFilter');
 
 var routes = require('./routes/index');
 var usersRoutes = require('./routes/users');
@@ -30,10 +28,6 @@ app.use(expressSession({
   secret: 'kangkang\'sfatheriskangkang'
 }));
 app.use(flash());
-
-// custom filter
-app.use(IDFilter);
-app.use(ssoInfoFilter);
 
 app.use('/', routes);
 app.use('/users', usersRoutes);
