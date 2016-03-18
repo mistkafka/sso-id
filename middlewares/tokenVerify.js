@@ -6,16 +6,16 @@ client.on('error', function (err) {
 });
 
 module.exports = function (req, res, next) {
-  var ssoToken = req.cookies.ssoToken;
+  var ssoToken = req.cookies.SSOID;
   
   if (!ssoToken) {
     res.locals.ssoInfo = null;
-    res.locals.userInfo = null;
     return next();
   }
   
-  client.hget(ssoToken, function (err, tokenInfo) {
+  client.hgetall(ssoToken, function (err, tokenInfo) {
     if (err) throw err;
+
     if (!tokenInfo) {
       res.locals.ssoInfo = null;
       res.locals.userInfo = null;

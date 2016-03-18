@@ -1,17 +1,5 @@
-<!DOCTYPE html>
-<html lang="zh_CN">
-<head>
-    <title><%= title %></title>
-    <meta charset="utf-8"/>
-    <link rel="stylesheet" href="/stylesheets/style.css"/>
-</head>
+<% include ../commons/header %>
 
-<body>
-<header>
-    <h1><%= title %></h1>
-</header>
-
-<main>
     <section id="loginSection">
         <form action="/users/login" method="POST">
             <input type="hidden" name="callback" value="<%= callback %>" /><br>
@@ -20,8 +8,5 @@
             <input type="submit" value="Login"><br>
         </form>
     </section>
-</main>
 
-<footer>&copy; 2016 by Mistkafka</footer>
-</body>
-</html>
+<% include ../commons/footer %>

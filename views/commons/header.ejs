@@ -8,5 +8,41 @@
 </head>
 
 <body>
-
+<div id="w960">
+<header>
+    <nav class="top-nav">
+        <ul>
+            <li><a id="menu-sso" href="http://id.vhost.com">SSO中心</a></li>
+            <li><a id="menu-music" href="http://music.vhost.com">音乐服务</a></li>
+            <li><a id="menu-note" href="http://note.com">日记服务(跨域)</a></li>
+            <% var ssoInfo = locals._locals.ssoInfo; %>
+            <% if (ssoInfo) {%>
+            <li class="float-right"><a href="/users/logout">退出</a></li>
+            <li class="float-right"><a href="/users/u/<%= ssoInfo.account %>">欢迎, <%= ssoInfo.account %></a></li>
+            <%} else {%>
+            <li class="float-right"><a href="/users/loginform">登录</a></li>
+            <li class="float-right"><a href="/users/registerform">注册</a></li>
+            <%}%>
+        </ul>
+    </nav>
+</header>
 <main>
+    <section id="reqInfoSection">
+        <% var requestInfo = locals._locals.reqInfo; %>
+        <h3>请求信息面板</h3>
+        <p>域名:<%= requestInfo.domain %></p>
+        <p>请求路径: <%= requestInfo.path %></p>
+        <% if (requestInfo.account) { %>
+        <p>登录帐号: <%= requestInfo.account %></p>
+        <p>登录时间: <%= requestInfo.loginTime %></p>
+        <p>身份Token: <%= requestInfo.ssoToken %></p>
+        <% } else { %>
+        <p>登录状态: 未登录</p>
+        <% } %>
+    </section>
+
+    <section id="serverInfo">
+        <h1><%= locals.serverName %></h1>
+        <p>TODO: 放一幅示意图 </p>
+    </section>
+

@@ -1,15 +1,11 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title><%= title %></title>
-</head>
-<body>
+<% include ../commons/header %>
+
 <input type="hidden" value="<%= callback %>" id="callback"/>
 <% crossDomainClients.forEach(function (client) { %>
     <%var url = 'http://' + client.domain + '/plantcookie?token=' + token%>
     <iframe width="0" height="0" src="<%= url %>"></iframe>
 <% }) %>
-</body>
+
 <script>
     window.setTimeout(function () {
                 var callback = document.getElementById('callback').value;
@@ -17,4 +13,5 @@
             },
             1000);
 </script>
-</html>
+
+<% include ../commons/footer %>
