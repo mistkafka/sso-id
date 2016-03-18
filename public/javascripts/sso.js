@@ -22,4 +22,3 @@ if (logout) {
     location.replace(url);
   };
 }
-

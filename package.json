@@ -20,6 +20,8 @@
     "node-rsa": "0.2.26",
     "random-token": "0.0.8",
     "superfetch": "1.1.1",
-    "connect-flash": "0.1.1"
+    "connect-flash": "0.1.1",
+    "redis": "2.5.0-1",
+    "date-format": "0.0.2"
   }
 }

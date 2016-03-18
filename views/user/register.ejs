@@ -1,17 +1,5 @@
-<!DOCTYPE html>
-<html lang="zh_CN">
-<head>
-    <title><%= title %></title>
-    <meta charset="urt-8"/>
-    <link rel="stylesheet" href="/stylesheets/style.css">
-</head>
+<% include ../commons/header %>
 
-<body>
-<header>
-    <h1><%= title %></h1>
-</header>
-
-<main>
     <section id="registerSection">
         <form action="/users/register" method="POST">
             <input type="hidden" value="<%= callback %>"/>
@@ -21,8 +9,5 @@
             <input type="submit" value="Register"/><br/>
         </form>
     </section>
-</main>
 
-<footer><p>&copy; 2016 by Mistkafka</p></footer>
-</body>
-</html>
+<% include ../commons/footer %>

@@ -6,8 +6,8 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var expressSession = require('express-session');
 var flash = require('connect-flash');
-var IDFilter = require('./utils/IDFilter');
-var ssoInfoFilter = require('./utils/SSOInfoFilter');
+var tokenVerify = require('./middlewares/tokenVerify');
+var requestInfoLoader = require('./middlewares/requestInfoLoader');
 
 var routes = require('./routes/index');
 var usersRoutes = require('./routes/users');
@@ -30,10 +30,11 @@ app.use(expressSession({
   secret: 'kangkang\'sfatheriskangkang'
 }));
 app.use(flash());
+app.use(tokenVerify);
+app.use(requestInfoLoader);
 
-// custom filter
-app.use(IDFilter);
-app.use(ssoInfoFilter);
+// app locals
+app.locals.serverName = 'SSO服务';
 
 app.use('/', routes);
 app.use('/users', usersRoutes);
@@ -65,6 +66,7 @@ if (app.get('env') === 'development') {
 app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error', {
+    title: 'Error',
     message: err.message,
     error: {}
   });
